@@ -3,3 +3,4 @@ requests
 json
 os
 sys
+python_dotenv
