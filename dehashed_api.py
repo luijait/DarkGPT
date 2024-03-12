@@ -1,13 +1,14 @@
 import requests
 import json
 import sys
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 
 # Carga de variables de entorno para autenticación en la API de Dehashed
 DEHASHED_API_KEY = os.getenv("DEHASHED_API_KEY")
 DEHASHED_USERNAME = os.getenv("DEHASHED_USERNAME")
-
-
 
 def consultar_dominio_dehashed(consulta):
     """
@@ -45,7 +46,6 @@ def consultar_dominio_dehashed(consulta):
                 pass
     # Formatea los resultados para su presentación
     resultado_ordenado = ""
-    print(json_crudo_dehashed)
     import time
     cabecera = "A continuación se muestran algunos de los registros encontrados:\n"
     for parametro, entradas in resultados.items():
@@ -58,7 +58,7 @@ def consultar_dominio_dehashed(consulta):
             fila += f"{item.get('database_name', 'No disponible')}\n"
             resultado_ordenado += fila
     tabla_completa = cabecera + resultado_ordenado
-    print(tabla_completa)
+ 
     return resultado_ordenado
 def convertir_json(raw_json):
     """
@@ -76,3 +76,4 @@ def convertir_json(raw_json):
     datos_json = json.loads(raw_json)
     entradas = datos_json['entries']
     return entradas
+
