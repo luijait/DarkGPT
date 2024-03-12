@@ -3,6 +3,8 @@ import os
 from dehashed_api import consultar_dominio_dehashed
 import json
 from functions import Leak_Function
+from dotenv import load_dotenv
+load_dotenv()
 
 # Definición de los prompts que se utilizarán para generar las respuestas del modelo.
 AgentPrompt = """
