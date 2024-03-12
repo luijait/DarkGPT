@@ -1,6 +1,6 @@
 from openai import Client
 import os
-from dehashed_api import query_dehashed_domain
+from dehashed_api import consultar_dominio_dehashed
 import json
 from functions import Leak_Function
 
@@ -16,7 +16,7 @@ Tu función es ser un asistente de OSINT que ayuda al usuario en procesos de inv
 En el caso de que tengas filtraciones: 
 Muestra todas las filtraciones en una tabla con este formato: 
 
-Usuario Mail Contraseña Telefono InfoExtra 
+Usuario Mail Contraseña Telefono InfoExtra Base de datos
 
 Si no tienes filtraciones:
 
@@ -45,7 +45,7 @@ class DarkGPT:
         # Genera una respuesta determinista para la llamada a función.
         functions_prompts = mensajes(message)
       
-        response = self.openai_client.chat.completions.create(model="gpt-4-1106-preview",
+        response = self.openai_client.chat.completions.create(model="gpt-4",
                                                               temperature=0,
                                                               messages=functions_prompts,
                                                               functions=self.functions)

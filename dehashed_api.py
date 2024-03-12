@@ -3,82 +3,76 @@ import json
 import sys
 import os
 
-from dotenv import load_dotenv
-
-# Carga las variables de entorno desde el archivo .env
-load_dotenv()
-
-# Acceder a las variables de entorno
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Carga de variables de entorno para autenticación en la API de Dehashed
 DEHASHED_API_KEY = os.getenv("DEHASHED_API_KEY")
 DEHASHED_USERNAME = os.getenv("DEHASHED_USERNAME")
 
-# Ahora puedes usar las variables, por ejemplo, para configurar clientes de API
-print(OPENAI_API_KEY)
-# Load environment variables for authentication with the Dehashed API
-DEHASHED_API_KEY = os.getenv("DEHASHED_API_KEY")
-DEHASHED_USERNAME = os.getenv("DEHASHED_USERNAME")
 
-def query_dehashed_domain(query):
+
+def consultar_dominio_dehashed(consulta):
     """
-    Queries specific domain information through the Dehashed API.
+    Consulta información de un dominio específico a través de la API de Dehashed.
     
-    This function constructs the query parameters based on user input, performs the query to the API,
-    and processes the obtained results to return them in a readable format.
+    Esta función construye los parámetros de consulta basados en la entrada del usuario, realiza la consulta a la API
+    y procesa los resultados obtenidos para devolverlos en un formato legible.
     
     Args:
-        query (dict): A dictionary with the query parameters (e.g., email, username).
+        consulta (dict): Un diccionario con los parámetros de consulta (por ejemplo, correo electrónico, nombre de usuario).
     
     Returns:
-        str: A formatted string with the query results.
+        str: Una cadena formateada con los resultados de la consulta.
     """
-    parameters = {'email': query.get("mail"), 'username': query.get("nickname")}
+    parametros = []
+    # Construye la lista de parámetros de consulta basada en la entrada proporcionada
+    parametros = {'email': consulta.get("mail"), 'username': consulta.get("nickname")}
     
-    results = {}
+    resultados = {}
     headers = {'Accept': 'application/json',}
     
-    # Perform a query to the API for each non-null parameter and accumulate the results
-    for type, value in parameters.items():
-        if value:
+    # Realiza una consulta a la API para cada parámetro no nulo y acumula los resultados
+    for tipo, valor in parametros.items():
+        if valor:
             try:
-                params = (('query', value),)
-                raw_json_dehashed = requests.get('https://api.dehashed.com/search',
+                params = (('query', valor),)
+                json_crudo_dehashed = requests.get('https://api.dehashed.com/search',
                                                headers=headers,
                                                params=params,
                                                auth=(DEHASHED_USERNAME, DEHASHED_API_KEY)).text
                 
-                results[type] = convert_json(raw_json_dehashed)
+                resultados[tipo] = convertir_json(json_crudo_dehashed)
             except Exception as e:
-                print(f"Error querying {type}: {e}")
+                print(f"Error al consultar {tipo}: {e}")
                 pass
-    # Format the results for presentation
-    formatted_result = ""
-    header = "Below are some of the records found:\n"
-    for parameter, entries in results.items():
-        for item in entries:
-            row = f"{item.get('email', 'Not available')}, "
-            row += f"{item.get('username', 'Not available')}, "
-            row += f"{item.get('password', 'Not available')}, "
-            row += f"{item.get('hashed_password', 'Not available')}, "
-            row += f"{item.get('phone', 'Not available')}, "
-            row += f"{item.get('database_name', 'Not available')}\n"
-            formatted_result += row
-    complete_table = header + formatted_result
-    return formatted_result
-
-def convert_json(raw_json):
+    # Formatea los resultados para su presentación
+    resultado_ordenado = ""
+    print(json_crudo_dehashed)
+    import time
+    cabecera = "A continuación se muestran algunos de los registros encontrados:\n"
+    for parametro, entradas in resultados.items():
+        for item in entradas:
+            fila = f"{item.get('email', 'No disponible')}, "
+            fila += f"{item.get('username', 'No disponible')}, "
+            fila += f"{item.get('password', 'No disponible')}, "
+            fila += f"{item.get('hashed_password', 'No disponible')}, "
+            fila += f"{item.get('phone', 'No disponible')}, "
+            fila += f"{item.get('database_name', 'No disponible')}\n"
+            resultado_ordenado += fila
+    tabla_completa = cabecera + resultado_ordenado
+    print(tabla_completa)
+    return resultado_ordenado
+def convertir_json(raw_json):
     """
-    Converts a raw JSON string into a list of Python objects.
+    Convierte una cadena JSON cruda en una lista de objetos Python.
     
-    This function is useful for processing the response from the Dehashed API, converting the JSON string into a list
-    of dictionaries representing the individual entries in the response.
+    Esta función es útil para procesar la respuesta de la API de Dehashed, convirtiendo la cadena JSON en una lista
+    de diccionarios que representan las entradas individuales de la respuesta.
     
     Args:
-        raw_json (str): The raw JSON string.
+        raw_json (str): La cadena JSON cruda.
         
     Returns:
-        list: A list of dictionaries, each representing an entry in the response.
+        list: Una lista de diccionarios, cada uno representando una entrada de la respuesta.
     """
-    json_data = json.loads(raw_json)
-    entries = json_data['entries']
-    return entries
+    datos_json = json.loads(raw_json)
+    entradas = datos_json['entries']
+    return entradas
