@@ -1,6 +1,5 @@
 openai==1.13.3
 requests
-json
 os
 sys
 python_dotenv
