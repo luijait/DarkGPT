@@ -18,7 +18,7 @@ Before starting, make sure you have Python installed on your system. This projec
 
 2. **Configure Environment Variables**
 
-   You will need to set up some environment variables for the script to work correctly. Copy the `.env.example` file to a new file named `.env`:
+   You will need to set up some environment variables for the script to work correctly. Copy the `.example.env` file to a new file named `.env`:
 
    DEHASHED_API_KEY="your_dehashed_api_key_here"
    DEHASHED_USERNAME="your_dehashed_username"
