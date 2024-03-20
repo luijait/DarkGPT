@@ -1,3 +1,4 @@
 openai==1.13.3
 requests
-python_dotenv
+python-dotenv
+pydantic==1.10.12
