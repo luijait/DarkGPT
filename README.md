@@ -13,20 +13,30 @@ Before starting, make sure you have Python installed on your system. This projec
 
    First, you need to clone the GitHub repository to your local machine. You can do this by executing the following command in your terminal:
 
-  git clone https://github.com/luijait/DarkGPT.git 
-  cd DarkGPT
+```shell
+git clone https://github.com/luijait/DarkGPT.git
+```
+```shell
+cd DarkGPT
+```
 
 2. **Configure Environment Variables**
 
    You will need to set up some environment variables for the script to work correctly. Copy the `.example.env` file to a new file named `.env`:
 
-   DEHASHED_API_KEY="your_dehashed_api_key_here"
-   DEHASHED_USERNAME="your_dehashed_username"
-   OPENAI_API_KEY="API_KEY from openai.com"
+```env
+DEHASHED_API_KEY="your_dehashed_api_key_here"
+DEHASHED_USERNAME="your_dehashed_username"
+OPENAI_API_KEY="API_KEY from openai.com"
+```
 4. **Install Dependencies**
 
    This project requires certain Python packages to run. Install them by running the following command:
 
-   pip install -r requirements.txt
+```shell
+pip install -r requirements.txt
+```
 5. Then Run the project:
-   python3 main.py
+```shell
+python3 main.py
+```
