@@ -31,7 +31,7 @@ RouterPrompt = "Eres un asistente de ciberseguridad que se encarga de clasificar
 class DarkGPT:
     # Método inicializador de la clase.
     def __init__(self):
-        self.model_name = "gpt-4-1106-preview"  # Identificador del modelo de OpenAI GPT a utilizar.
+        self.model_name = "gpt-4-turbo-preview"  # Identificador del modelo de OpenAI GPT a utilizar.
         self.temperature = 0.7  # Controla la aleatoriedad de las respuestas. Valores más bajos hacen que las respuestas sean más deterministas.
         self.functions = Leak_Function  # Funciones personalizadas para que el modelo las utilice.
         self.openai_client = Client(api_key=os.getenv("OPENAI_API_KEY"))  # Configuración del cliente OpenAI con la clave API.
