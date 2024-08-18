@@ -1,0 +1,118 @@
+CODE_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+        </div>
+        <button id="restartButton">Restart</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+"""
+create_file('index.html', CODE_HTML)
+STDOUT/STDERR
+[File index.html created.]
+[File: /home/user/workspace/index.html (28 lines total after edit)]
+1|
+2|<!DOCTYPE html>
+3|<html lang="en">
+4|<head>
+5|    <meta charset="UTF-8">
+6|    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+7|    <title>Tic Tac Toe</title>
+8|    <link rel="stylesheet" href="styles.css">
+9|</head>
+10|<body>
+11|    <div class="container">
+12|        <h1>Tic Tac Toe</h1>
+13|        <div class="board" id="board">
+14|            <div class="cell" data-cell></div>
+15|            <div class="cell" data-cell></div>
+16|            <div class="cell" data-cell></div>
+17|            <div class="cell" data-cell></div>
+18|            <div class="cell" data-cell></div>
+19|            <div class="cell" data-cell></div>
+20|            <div class="cell" data-cell></div>
+21|            <div class="cell" data-cell></div>
+22|            <div class="cell" data-cell></div>
+23|        </div>
+24|        <button id="restartButton">Restart</button>
+25|    </div>
+26|    <script src="script.js"></script>
+27|</body>
+28|</html>
+[File updated. Please review the changes carefully and make sure they are correct (correct indentation, no duplicate or redundant lines etc). Edit the file again if necessary.]
+
+EXÉCUTER
+CODE_CSS = """
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 5px;
+    margin: 20px auto;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.cell.x {
+    color: #ff0000;
+}
+
+.cell.o {
+    color: #0000ff;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+"""
+create_file('styles.css', CODE_CSS)
