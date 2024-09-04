@@ -27,9 +27,7 @@ Establece una conversación normal
 """
 RouterPrompt = "Eres un asistente de ciberseguridad que se encarga de clasificar metadatos en funciones para OSINT"
 
-# Clase principal DarkGPT que encapsula la funcionalidad del modelo GPT y la interacción con la API de OpenAI.
 class DarkGPT:
-    # Método inicializador de la clase.
     def __init__(self):
         self.model_name = os.getenv("GPT_MODEL_NAME")  # Identificador del modelo de OpenAI GPT a utilizar.
         self.temperature = 0.7  # Controla la aleatoriedad de las respuestas. Valores más bajos hacen que las respuestas sean más deterministas.
@@ -37,25 +35,19 @@ class DarkGPT:
         self.openai_client = Client(api_key=os.getenv("OPENAI_API_KEY"))  # Configuración del cliente OpenAI con la clave API.
     
     # Método para ejecutar una llamada a función y procesar su salida.
-    def execute_function_call(self, function_prompts: list, message):
-        # Función interna para generar mensajes basados en el prompt y el mensaje del usuario.
-        def mensajes(mensaje):
-            lista_mensajes = [{"role": "system", "content": RouterPrompt},
-                              {"role": "user", "content": mensaje}]
-            return lista_mensajes
-        
-        # Genera una respuesta determinista para la llamada a función.
-        functions_prompts = mensajes(message)
+    def execute_function_call(self, message):
+        functions_prompts = [{"role": "system", "content": RouterPrompt},
+                              {"role": "user", "content": message}]
       
-        response = self.openai_client.chat.completions.create(model="gpt-4",
-                                                              temperature=0,
-                                                              messages=functions_prompts,
-                                                              functions=self.functions)
+        response = self.openai_client.chat.completions.create(
+            model="gpt-4",
+            temperature=0,
+            messages=functions_prompts,
+            functions=self.functions
+        )
       
-        # Procesamiento previo de la salida para convertirla de JSON a un formato manejable.
         try:
             preprocessed_output = json.loads(response.choices[0].message.function_call.arguments)
-        # Procesamiento de la salida utilizando la función personalizada check_domain_info_dehashed.
             processed_output = check_domain_info_dehashed(preprocessed_output)
         except:
             processed_output = "No encontrado"
@@ -75,23 +67,3 @@ class DarkGPT:
                 history_json.append({"role": "assistant", "content": message["ASISTENTE"]})
         
         return history_json
-
-    # Método para generar respuestas utilizando el modelo GPT con la salida de la función incluida en el historial.
-    def GPT_with_function_output(self, historial: dict, callback=None):
-        # Ejecuta la llamada a la función y obtiene su salida.
-      
-        function_output = self.execute_function_call(Leak_Function, historial[-1].get("USUARIO", ""))
-        historial_json = self.process_history_with_function_output(historial, function_output)
-       
-        # Genera una respuesta del modelo.
-        respuesta = self.openai_client.chat.completions.create(model=self.model_name,
-                                                               temperature=self.temperature,
-                                                               messages=historial_json,
-                                                               stream=True)
-        # Itera a través de los fragmentos de respuesta e imprime el contenido.
-        for chunk in respuesta:
-            try:
-                print(chunk.choices[0].delta.content or "\n", end="")
-            except:
-                pass  # Ignora los errores en el procesamiento de fragmentos.
-
