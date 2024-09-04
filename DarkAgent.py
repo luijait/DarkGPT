@@ -1,6 +1,6 @@
 from openai import Client
 import os
-from dehashed_api import consultar_dominio_dehashed
+from dehashed_api import check_domain_info_dehashed
 import json
 from functions import Leak_Function
 from dotenv import load_dotenv
@@ -55,8 +55,8 @@ class DarkGPT:
         # Procesamiento previo de la salida para convertirla de JSON a un formato manejable.
         try:
             preprocessed_output = json.loads(response.choices[0].message.function_call.arguments)
-        # Procesamiento de la salida utilizando la función personalizada consultar_dominio_dehashed.
-            processed_output = consultar_dominio_dehashed(preprocessed_output)
+        # Procesamiento de la salida utilizando la función personalizada check_domain_info_dehashed.
+            processed_output = check_domain_info_dehashed(preprocessed_output)
         except:
             processed_output = "No encontrado"
             pass

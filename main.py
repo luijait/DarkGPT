@@ -1,5 +1,6 @@
-from DarkAgent import DarkGPT
 from cli import ConversationalShell
+from DarkAgent import DarkGPT
+from openai import OpenAIError
 
 # Banner de inicio para la aplicación, mostrando un diseño ASCII con el creador
 banner = """
@@ -17,9 +18,13 @@ fork de: lvoidi
 print(banner)
 
 def main():
-    darkgpt = DarkGPT()
-    conversational_shell = ConversationalShell(darkgpt)
-    conversational_shell.Start()
+    try:
+        darkgpt = DarkGPT()
+        conversational_shell = ConversationalShell(darkgpt)
+        conversational_shell.Start()
+    except OpenAIError:
+        print("No has definido las variables de entorno: Define OPENAI_API_KEY, GPT_MODEL_NAME, DEHASHED_API_KEY, DEHASHED_USERNAME")
+        exit(1)
 
 # Punto de entrada principal para ejecutar la aplicación
 if __name__ == "__main__":

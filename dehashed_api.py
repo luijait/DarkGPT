@@ -9,7 +9,7 @@ import os
 DEHASHED_API_KEY = os.getenv("DEHASHED_API_KEY")
 DEHASHED_USERNAME = os.getenv("DEHASHED_USERNAME")
 
-def get_domain_info_dehashed(request_dict: dict) -> str:
+def check_domain_info_dehashed(request_dict: dict) -> str:
     """
     Gets the domain information by using Dehashed API, it builds the parameters making use of 
     user input and then makes the request.
