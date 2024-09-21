@@ -1,11 +1,12 @@
 import os
 from darkgpt import GPT_with_function_output, print_debug
 
-def start_shell(darkgpt, debug=False):
-    print("Welcome to DarkGPT, the best OSINT Agent "
-          "A wizard that uses GPT-4 to do database queries and filtered information written by @luijait_. "
-          "Type 'exit' to finish, 'clear' to clear the screen. "
-          "Twitter @luijait_")
+def start_shell(darkgpt, api_choice, debug=False):
+    print(f"Welcome to DarkGPT, the best OSINT Agent "
+          f"A wizard that uses GPT-4 to do database queries and filtered information written by @luijait_. "
+          f"Type 'exit' to finish, 'clear' to clear the screen. "
+          f"Using {api_choice.upper()} API. "
+          f"Twitter @luijait_")
 
     try:
         while True:
@@ -16,14 +17,14 @@ def start_shell(darkgpt, debug=False):
             elif user_input.lower() == 'clear':
                 os.system('cls' if os.name == 'nt' else 'clear')
             else:
-                process_input(darkgpt, user_input, debug)
+                process_input(darkgpt, user_input, api_choice, debug)
     except KeyboardInterrupt:
         print("\nSession terminated by the user.")
 
-def process_input(darkgpt, user_input, debug=False):
+def process_input(darkgpt, user_input, api_choice, debug=False):
     def handle_chunk(chunk_content):
         print(chunk_content, end="")
-        
+
     history = {"USUARIO": user_input}
     historial_json = [history]
 
@@ -35,6 +36,7 @@ def process_input(darkgpt, user_input, debug=False):
         agent_prompt=darkgpt['agent_prompt'],
         historial=historial_json,
         callback=handle_chunk,
+        api_choice=api_choice,
         debug=debug
     )
     

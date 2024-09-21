@@ -5,8 +5,8 @@ from darkgpt import print_debug
 from cli import start_shell
 from openai import Client
 from dotenv import load_dotenv
-import os
 from functions import Leak_Function
+from leaks_api import query_dehashed, query_leakosint
 
 load_dotenv()
 
@@ -31,6 +31,7 @@ def main():
     # Configurar el parser de argumentos
     parser = argparse.ArgumentParser(description="DarkGPT CLI")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
+    parser.add_argument("--api", choices=["dehashed", "leakosint"], help="Choose the API to use")
     args = parser.parse_args()
 
     # ANSI escape codes for colored output
@@ -43,23 +44,32 @@ def main():
         color = RED if is_error else (YELLOW if is_warning else GREEN)
         print(f"{color}[DEBUG] {message}{RESET}")
 
-    # Check for required API keys
-    if not os.getenv("OPENAI_API_KEY"):
-        print_debug("WARNING: OPENAI_API_KEY not found in environment variables.", is_warning=True)
-        print_debug("CRITICAL: OpenAI API key is missing. The application will not function correctly without this.", is_error=True)
-        print_debug("Please set OPENAI_API_KEY in your .env file.", is_error=True)
-        return
 
-    if not os.getenv("DEHASHED_API_KEY") or not os.getenv("DEHASHED_USERNAME"):
-        print_debug("WARNING: DEHASHED_API_KEY or DEHASHED_USERNAME not found in environment variables.", is_warning=True)
-        print_debug("CRITICAL: DeHashed API credentials are missing. The application will not function correctly without these.", is_error=True)
-        print_debug("Please set DEHASHED_API_KEY and DEHASHED_USERNAME in your .env file.", is_error=True)
+    missing_keys = []
+    if not os.getenv("OPENAI_API_KEY"):
+        missing_keys.append("OPENAI_API_KEY")
+    if not os.getenv("DEHASHED_API_KEY"):
+        missing_keys.append("DEHASHED_API_KEY")
+    if not os.getenv("DEHASHED_USERNAME"):
+        missing_keys.append("DEHASHED_USERNAME")
+    
+    if args.api == "leakosint":
+        if not os.getenv("LEAKOSINT_API_KEY"):
+            missing_keys.append("LEAKOSINT_API_KEY")
+    else:
+        args.api = "dehashed"        
+
+    if missing_keys:
+        for key in missing_keys:
+            print_debug(f"WARNING: {key} not found in environment variables.", is_warning=True)
+            print_debug(f"CRITICAL: {key} is missing. The application will not function correctly without it.", is_error=True)
+        print_debug("Please set the missing API keys in your .env file.", is_error=True)
         return
 
     darkgpt = {
         "client": Client(api_key=os.getenv("OPENAI_API_KEY")),
         "model_name": os.getenv("GPT_MODEL_NAME"),
-        "temperature": 0.0,
+        "temperature": 0.7,
         "functions": Leak_Function,
         "agent_prompt": """You are an AI assistant specialized in OSINT (Open Source Intelligence) and information gathering. Your task is to analyze the provided data and give insights based on the leaked information found. Please be factual and objective in your analysis. Do not engage in or encourage any illegal activities. Respect privacy and use information ethically.
 
@@ -76,7 +86,7 @@ Create a complex markdown table with every leak
 """
     }
 
-    start_shell(darkgpt, debug=args.debug)
+    start_shell(darkgpt, api_choice=args.api, debug=args.debug)
 
     if args.debug:
         print_debug("DarkGPT and ConversationalShell initialized with debug mode enabled.")

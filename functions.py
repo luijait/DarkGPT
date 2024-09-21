@@ -1,4 +1,4 @@
-Leak_Function = [   
+Leak_Function = [
     {
         "name": "dehashed-search",
         "description": "Use this for investigating persons or entities. Can handle multiple queries.",
@@ -16,7 +16,7 @@ Leak_Function = [
                             },
                             "mail": {
                                 "type": "string",
-                                "description": "The mail/domain to search, if not full mail is provided, take the domain",
+                                "description": "The mail to search",
                             },
                         },
                         "required": ["mail", "nickname"],

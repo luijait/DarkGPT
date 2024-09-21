@@ -3,7 +3,7 @@ import json
 import time
 from dotenv import load_dotenv
 from openai import Client
-from dehashed_api import query_dehashed_multiple
+from leaks_api import query_dehashed, query_leakosint
 from functions import Leak_Function
 
 load_dotenv()
@@ -18,7 +18,7 @@ def print_debug(message, is_error=False, is_warning=False):
     color = RED if is_error else (YELLOW if is_warning else GREEN)
     print(f"{color}[DEBUG] {message}{RESET}")
 
-def execute_function_call(openai_client, model_name, functions, message, debug=False):
+def execute_function_call(openai_client, model_name, functions, message, api_choice, debug=False):
     if debug:
         print_debug(f"Executing function call with message: {message}")
         print_debug(f"Function prompts: {functions}")
@@ -57,12 +57,15 @@ def execute_function_call(openai_client, model_name, functions, message, debug=F
         preprocessed_output = {"error": "No encontrado"}
 
     try:
-        processed_output = query_dehashed_multiple(preprocessed_output.get('queries', []), debug=debug)
+        if api_choice == "dehashed":
+            processed_output = query_dehashed(preprocessed_output.get('queries', []), debug=debug)
+        elif api_choice == "leakosint":
+            processed_output = query_leakosint(preprocessed_output.get('queries', []), debug=debug)
         if debug:
-            print_debug(f"Processed output from Dehashed API: {processed_output}")
+            print_debug(f"Processed output from {api_choice.capitalize()} API: {processed_output}")
     except Exception as e:
         if debug:
-            print_debug(f"Error during Dehashed API consultation: {e}", is_error=True)
+            print_debug(f"Error during {api_choice.capitalize()} API consultation: {e}", is_error=True)
         processed_output = {"error": "No encontrado"}
 
     return processed_output
@@ -93,12 +96,12 @@ def process_history_with_function_output(agent_prompt, messages, function_output
 
     return history_json
 
-def GPT_with_function_output(openai_client, model_name, temperature, functions, agent_prompt, historial, callback=None, debug=False):
+def GPT_with_function_output(openai_client, model_name, temperature, functions, agent_prompt, historial, callback=None, api_choice=None, debug=False):
     if debug:
         print_debug(f"Starting GPT_with_function_output with historial: {historial}")
 
     message = historial[-1].get("USUARIO", "")
-    function_output = execute_function_call(openai_client, model_name, functions, message, debug=debug)
+    function_output = execute_function_call(openai_client, model_name, functions, message, api_choice, debug=debug)
 
     if debug:
         print_debug(f"Function output: {function_output}")
