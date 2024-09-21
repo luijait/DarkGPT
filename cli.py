@@ -7,10 +7,10 @@ from darkgpt import execute_function_call, process_history_with_function_output
 from darkgpt import execute_function_call, process_history_with_function_output
 
 def start_shell(darkgpt, debug=False):
-    print("Welcome to DarkGPT, a reduced version of the OSINT Agent of our 0dAI model. "
+    print("Welcome to DarkGPT, the best OSINT Agent "
           "A wizard that uses GPT-4 to do database queries and filtered information written by @luijait_. "
           "Type 'exit' to finish, 'clear' to clear the screen. "
-          "If you want an improved version of this agent with autonomous pentesting and hacking functions, visit https://0dai.omegaai.io")
+          "Twitter @luijait_")
 
     try:
         while True:
