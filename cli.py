@@ -1,10 +1,5 @@
 import os
 from darkgpt import GPT_with_function_output, print_debug
-from darkgpt import execute_function_call, process_history_with_function_output
-from darkgpt import execute_function_call, process_history_with_function_output
-from darkgpt import execute_function_call, process_history_with_function_output
-from darkgpt import execute_function_call, process_history_with_function_output
-from darkgpt import execute_function_call, process_history_with_function_output
 
 def start_shell(darkgpt, debug=False):
     print("Welcome to DarkGPT, the best OSINT Agent "
