@@ -3,8 +3,12 @@ import json
 import time
 from dotenv import load_dotenv
 from openai import Client
+from utils import print_debug
 from leaks_api import query_dehashed, query_leakosint
 from functions import Leak_Function
+import instructor
+from pydantic import BaseModel
+from typing import List, Optional
 
 load_dotenv()
 
@@ -13,10 +17,6 @@ GREEN = "\033[92m"
 RED = "\033[91m"
 YELLOW = "\033[93m"
 RESET = "\033[0m"
-
-def print_debug(message, is_error=False, is_warning=False):
-    color = RED if is_error else (YELLOW if is_warning else GREEN)
-    print(f"{color}[DEBUG] {message}{RESET}")
 
 def execute_function_call(openai_client, model_name, functions, message, api_choice, debug=False):
     if debug:
@@ -96,6 +96,18 @@ def process_history_with_function_output(agent_prompt, messages, function_output
 
     return history_json
 
+class DehashedResult(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
+    telephone: Optional[str]
+
+class DehashedResponse(BaseModel):
+    results: List[DehashedResult]
+
+# Enable response_model in OpenAI client
+client = instructor.patch(Client())
+
 def GPT_with_function_output(openai_client, model_name, temperature, functions, agent_prompt, historial, callback=None, api_choice=None, debug=False):
     if debug:
         print_debug(f"Starting GPT_with_function_output with historial: {historial}")
@@ -112,32 +124,46 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
         print_debug(f"History JSON for OpenAI API: {historial_json}")
 
     try:
-        response = openai_client.chat.completions.create(
-            model=model_name,
-            temperature=temperature,
-            messages=historial_json,
-            stream=True
-        )
-        if debug:
-            print_debug("OpenAI API streaming started.")
+        if api_choice == "dehashed" or api_choice == "leakosint":
+            response = openai_client.chat.completions.create(
+                model=model_name,
+                temperature=temperature,
+                messages=historial_json,
+                response_model=DehashedResponse,
+                max_retries=2
+            )
+            if debug:
+                print_debug(f"Structured Dehashed response: {response}")
+            
+            # Convert structured response to string for streaming
+            streamed_response = response.model_dump_json(indent=2)
+        else:
+            response = openai_client.chat.completions.create(
+                model=model_name,
+                temperature=temperature,
+                messages=historial_json,
+                stream=True
+            )
+            if debug:
+                print_debug("OpenAI API streaming started.")
+            
+            streamed_response = ""
+            for chunk in response:
+                try:
+                    content = chunk.choices[0].delta.content or "\n"
+                    streamed_response += content
+                    print(content, end="")
+                    if debug:
+                        print_debug(f"Streamed chunk: {content}")
+                except Exception as e:
+                    if debug:
+                        print_debug(f"Error processing streamed chunk: {e}", is_error=True)
+                    pass
     except Exception as e:
         if debug:
-            print_debug(f"Error during OpenAI API streaming: {e}", is_error=True)
+            print_debug(f"Error during OpenAI API call: {e}", is_error=True)
         return
 
-    streamed_response = ""
-    for chunk in response:
-        try:
-            content = chunk.choices[0].delta.content or "\n"
-            streamed_response += content
-            print(content, end="")
-            if debug:
-                print_debug(f"Streamed chunk: {content}")
-        except Exception as e:
-            if debug:
-                print_debug(f"Error processing streamed chunk: {e}", is_error=True)
-            pass 
-        
     if debug:
         print_debug(f"Final Response: {streamed_response}")
 
