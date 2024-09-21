@@ -1,20 +1,29 @@
-Leak_Function = [   {
+Leak_Function = [   
+    {
         "name": "dehashed-search",
-        "description": "You will use this whenever the query is related to any type of action related to the investigation of persons or entities of any kind.",
+        "description": "Use this for investigating persons or entities. Can handle multiple queries.",
         "parameters": {
             "type": "object",
             "properties": {
-                "mail": {
-                    "type": "string",
-                    "description": "The mail/domain to search, if not full mail is provided, take the domain",
-                },
-                "nickname": {
-                    "type": "string",
-                    "description": "The nickname to search",
+                "queries": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "nickname": {
+                                "type": "string",
+                                "description": "The nickname to search",
+                            },
+                            "mail": {
+                                "type": "string",
+                                "description": "The mail/domain to search, if not full mail is provided, take the domain",
+                            },
+                        },
+                        "required": ["mail", "nickname"],
+                    },
                 },
             },
-            "required": ["mail", "nickname"], # Puedes añadir los parametros que quieras
+            "required": ["queries"],
         },
-
     },
 ]
