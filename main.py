@@ -33,6 +33,29 @@ def main():
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
 
+    # ANSI escape codes for colored output
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    RESET = "\033[0m"
+
+    def print_debug(message, is_error=False, is_warning=False):
+        color = RED if is_error else (YELLOW if is_warning else GREEN)
+        print(f"{color}[DEBUG] {message}{RESET}")
+
+    # Check for required API keys
+    if not os.getenv("OPENAI_API_KEY"):
+        print_debug("WARNING: OPENAI_API_KEY not found in environment variables.", is_warning=True)
+        print_debug("CRITICAL: OpenAI API key is missing. The application will not function correctly without this.", is_error=True)
+        print_debug("Please set OPENAI_API_KEY in your .env file.", is_error=True)
+        return
+
+    if not os.getenv("DEHASHED_API_KEY") or not os.getenv("DEHASHED_USERNAME"):
+        print_debug("WARNING: DEHASHED_API_KEY or DEHASHED_USERNAME not found in environment variables.", is_warning=True)
+        print_debug("CRITICAL: DeHashed API credentials are missing. The application will not function correctly without these.", is_error=True)
+        print_debug("Please set DEHASHED_API_KEY and DEHASHED_USERNAME in your .env file.", is_error=True)
+        return
+
     darkgpt = {
         "client": Client(api_key=os.getenv("OPENAI_API_KEY")),
         "model_name": os.getenv("GPT_MODEL_NAME"),
