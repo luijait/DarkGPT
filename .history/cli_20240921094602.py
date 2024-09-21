@@ -28,7 +28,7 @@ def start_shell(darkgpt, debug=False):
 def process_input(darkgpt, user_input, debug=False):
     def handle_chunk(chunk_content):
         print(chunk_content, end="")
-        
+
     history = {"USUARIO": user_input}
     historial_json = [history]
 
@@ -42,6 +42,3 @@ def process_input(darkgpt, user_input, debug=False):
         callback=handle_chunk,
         debug=debug
     )
-    
-    if debug:
-        print_debug("Processed input and received response successfully.")

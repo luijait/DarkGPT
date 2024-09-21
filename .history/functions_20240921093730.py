@@ -4,7 +4,7 @@ Leak_Function = [   {
         "parameters": {
             "type": "object",
             "properties": {
-                "nickname": {
+                          "nickname": {
                     "type": "string",
                     "description": "The nickname to search",
                 },
@@ -14,7 +14,7 @@ Leak_Function = [   {
                 },
       
             },
-            "required": ["mail", "nickname"], 
+            "required": ["mail", "nickname"], # Puedes añadir los parametros que quieras
         },
 
     },

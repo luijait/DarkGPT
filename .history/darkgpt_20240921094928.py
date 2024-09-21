@@ -3,7 +3,7 @@ import json
 import time
 from dotenv import load_dotenv
 from openai import Client
-from dehashed_api import query_dehashed
+from dehashed_api import consultar_dominio_dehashed
 from functions import Leak_Function
 
 load_dotenv()
@@ -56,7 +56,7 @@ def execute_function_call(openai_client, model_name, functions, message, debug=F
         preprocessed_output = {"error": "No encontrado"}
 
     try:
-        processed_output = query_dehashed(preprocessed_output, debug=debug)
+        processed_output = consultar_dominio_dehashed(preprocessed_output, debug=debug)
         if debug:
             print_debug(f"Processed output from Dehashed API: {processed_output}")
     except Exception as e:

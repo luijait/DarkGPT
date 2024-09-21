@@ -21,7 +21,7 @@ ________       __        _______   __   ___       _______    _______  __________
 (________/(___/    \___)|__|  \___)(__|  \__)     \_______)(_______)       \__|     
 
 hecho por: @luijait_
-ayudado por: @simplyjuanjo (juanjeras)
+ayudado por: @simplyjuanjo
 """
 # Imprimir el banner para dar la bienvenida al usuario
 print(banner)
@@ -36,7 +36,7 @@ def main():
     darkgpt = {
         "client": Client(api_key=os.getenv("OPENAI_API_KEY")),
         "model_name": os.getenv("GPT_MODEL_NAME"),
-        "temperature": 0.0,
+        "temperature": 0.7,
         "functions": Leak_Function,
         "agent_prompt": """You are an AI assistant specialized in OSINT (Open Source Intelligence) and information gathering. Your task is to analyze the provided data and give insights based on the leaked information found. Please be factual and objective in your analysis. Do not engage in or encourage any illegal activities. Respect privacy and use information ethically.
 
@@ -48,9 +48,7 @@ Please provide a detailed analysis including:
 3. Recommendations for affected parties
 4. General cybersecurity best practices
 
-Format your response in a clear, professional manner.
-Create a complex markdown table with every leak
-"""
+Format your response in a clear, professional manner."""
     }
 
     start_shell(darkgpt, debug=args.debug)

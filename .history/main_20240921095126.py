@@ -36,7 +36,7 @@ def main():
     darkgpt = {
         "client": Client(api_key=os.getenv("OPENAI_API_KEY")),
         "model_name": os.getenv("GPT_MODEL_NAME"),
-        "temperature": 0.0,
+        "temperature": 0.7,
         "functions": Leak_Function,
         "agent_prompt": """You are an AI assistant specialized in OSINT (Open Source Intelligence) and information gathering. Your task is to analyze the provided data and give insights based on the leaked information found. Please be factual and objective in your analysis. Do not engage in or encourage any illegal activities. Respect privacy and use information ethically.
 

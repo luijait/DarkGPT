@@ -4,17 +4,16 @@ Leak_Function = [   {
         "parameters": {
             "type": "object",
             "properties": {
+                "mail": {
+                    "type": "string",
+                    "description": "The mail/domain to search, if not full mail is provided, take the domain, Please this field should never be the nickname,
+                },
                 "nickname": {
                     "type": "string",
                     "description": "The nickname to search",
                 },
-                "mail": {
-                    "type": "string",
-                    "description": "The mail/domain to search, if not full mail is provided, take the domain, Please this field should never be the nickname",
-                },
-      
             },
-            "required": ["mail", "nickname"], 
+            "required": ["mail", "nickname"], # Puedes añadir los parametros que quieras
         },
 
     },

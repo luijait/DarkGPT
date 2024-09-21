@@ -14,7 +14,7 @@ Leak_Function = [   {
                 },
       
             },
-            "required": ["mail", "nickname"], 
+            "required": ["mail", "nickname"], # Puedes añadir los parametros que quieras
         },
 
     },

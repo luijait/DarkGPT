@@ -12,7 +12,7 @@ DEHASHED_API_KEY = os.getenv("DEHASHED_API_KEY")
 DEHASHED_USERNAME = os.getenv("DEHASHED_USERNAME")
 
 
-def query_dehashed(query, debug=False):
+def query_dehashed_domain(query, debug=False):
     parameters = {'email': query.get("mail"), 'username': query.get("nickname")}
 
     if debug:

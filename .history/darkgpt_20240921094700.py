@@ -3,7 +3,7 @@ import json
 import time
 from dotenv import load_dotenv
 from openai import Client
-from dehashed_api import query_dehashed
+from dehashed_api import consultar_dominio_dehashed
 from functions import Leak_Function
 
 load_dotenv()
@@ -56,7 +56,7 @@ def execute_function_call(openai_client, model_name, functions, message, debug=F
         preprocessed_output = {"error": "No encontrado"}
 
     try:
-        processed_output = query_dehashed(preprocessed_output, debug=debug)
+        processed_output = consultar_dominio_dehashed(preprocessed_output, debug=debug)
         if debug:
             print_debug(f"Processed output from Dehashed API: {processed_output}")
     except Exception as e:
@@ -121,19 +121,14 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
             print_debug(f"Error during OpenAI API streaming: {e}", is_error=True)
         return
 
-    streamed_response = ""
     for chunk in response:
         try:
             content = chunk.choices[0].delta.content or "\n"
-            streamed_response += content
             print(content, end="")
             if debug:
                 print_debug(f"Streamed chunk: {content}")
         except Exception as e:
             if debug:
                 print_debug(f"Error processing streamed chunk: {e}", is_error=True)
-            pass 
-        
-    if debug:
-        print_debug(f"Final Response: {streamed_response}")
+            pass
 
