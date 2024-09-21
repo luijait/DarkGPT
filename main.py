@@ -1,16 +1,13 @@
-# Importación de módulos necesarios
-import os
-import argparse
-from darkgpt import print_debug
-from cli import start_shell
+from cli import parse_arguments, start_shell
+from utils import print_debug
+from darkgpt import GPT_with_function_output
 from openai import Client
-from dotenv import load_dotenv
 from functions import Leak_Function
-from leaks_api import query_dehashed, query_leakosint
+import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
-# Banner de inicio para la aplicación, mostrando un diseño ASCII con el creador
 banner = """
 ________       __        _______   __   ___       _______    _______  ___________  
 |"      "\     /""\      /"      \ |/"| /  ")     /" _   "|  |   __ "\("     _   ") 
@@ -26,25 +23,9 @@ ayudado por: @simplyjuanjo (juanjeras)
 # Imprimir el banner para dar la bienvenida al usuario
 print(banner)
 
-# Definición de la función principal
 def main():
-    # Configurar el parser de argumentos
-    parser = argparse.ArgumentParser(description="DarkGPT CLI")
-    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
-    parser.add_argument("--api", choices=["dehashed", "leakosint"], help="Choose the API to use")
-    args = parser.parse_args()
-
-    # ANSI escape codes for colored output
-    GREEN = "\033[92m"
-    RED = "\033[91m"
-    YELLOW = "\033[93m"
-    RESET = "\033[0m"
-
-    def print_debug(message, is_error=False, is_warning=False):
-        color = RED if is_error else (YELLOW if is_warning else GREEN)
-        print(f"{color}[DEBUG] {message}{RESET}")
-
-
+    args = parse_arguments()
+    
     missing_keys = []
     if not os.getenv("OPENAI_API_KEY"):
         missing_keys.append("OPENAI_API_KEY")
@@ -85,11 +66,25 @@ Format your response in a clear, professional manner.
 Create a complex markdown table with every leak
 """
     }
-
-    start_shell(darkgpt, api_choice=args.api, debug=args.debug)
-
     if args.debug:
-        print_debug("DarkGPT and ConversationalShell initialized with debug mode enabled.")
+        print_debug("DarkGPT initialized with debug mode enabled.")
+
+    if args.shell:
+        start_shell(darkgpt, api_choice=args.api, debug=args.debug)
+    else:
+        initial_message = args.message if args.message else input("Enter your message: ")
+        historial = [{"USUARIO": initial_message}]
+        
+        GPT_with_function_output(
+            darkgpt["client"],
+            darkgpt["model_name"],
+            darkgpt["temperature"],
+            darkgpt["functions"],
+            darkgpt["agent_prompt"],
+            historial,
+            api_choice=args.api,
+            debug=args.debug
+        )
 
 # Punto de entrada principal para ejecutar la aplicación
 if __name__ == "__main__":

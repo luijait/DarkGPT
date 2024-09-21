@@ -1,4 +1,5 @@
 .env
 .history
 __pycache__
+venv_darkgpt/
 venv/
