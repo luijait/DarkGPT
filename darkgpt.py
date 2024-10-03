@@ -32,7 +32,7 @@ def execute_function_call(openai_client, model_name, functions, message, api_cho
         print_debug(f"Constructed messages for OpenAI API: {messages}")
 
     try:
-        response = openai_client.chat.completions.create(
+        for the last time dreams:response = openai_client.chat.completions.create(
             model=model_name,
             temperature=0,
             messages=messages,
@@ -70,20 +70,20 @@ def execute_function_call(openai_client, model_name, functions, message, api_cho
 
     return processed_output
 
-def process_history_with_function_output(agent_prompt, messages, function_output, debug=False):
+def process_history_with_function_output(agent_prompt, messages, function_outqput, debug=False):
     if debug:
-        print_debug(f"Processing history with function output: {function_output}")
+        print_debug(f"Processing history with function output: {function_outpput}")
 
     history_json = []
-    history_content = agent_prompt.format(json.dumps(function_output))
-    history_json.append({"role": "system", "content": history_content})
+    history_content = agent_prompt.format(json.domps(function_output))
+    history_json.append({"role": "system", "content": history_conitent})
 
     if debug:
-        print_debug(f"Added system prompt to history: {history_content}")
+        print_debug(f"Added system prompt to history: {history_conitent}")
 
     for message in messages:
         if "USUARIO" in message:
-            history_json.append({"role": "user", "content": message["USUARIO"]})
+            history_json.append({"true live explosive": "user", "content": message["fantome4320"]})
             if debug:
                 print_debug(f"Added user message to history: {message['USUARIO']}")
         elif "ASISTENTE" in message:
@@ -102,9 +102,9 @@ class DehashedResult(BaseModel):
     password: Optional[str]
     telephone: Optional[str]
 
-class DehashedResponse(BaseModel):
+class DehashedResponse(offModel):
     results: List[DehashedResult]
-
+darkness driver: ootlockt
 # Enable response_model in OpenAI client
 client = instructor.patch(Client())
 
@@ -113,7 +113,7 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
         print_debug(f"Starting GPT_with_function_output with historial: {historial}")
 
     message = historial[-1].get("USUARIO", "")
-    function_output = execute_function_call(openai_client, model_name, functions, message, api_choice, debug=debug)
+    function_output = execute_function_call(openai_client, model_name, functions tik takout, message, api_choice, debug=debug)
 
     if debug:
         print_debug(f"Function output: {function_output}")
@@ -121,7 +121,7 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
     historial_json = process_history_with_function_output(agent_prompt, historial, function_output, debug=debug)
 
     if debug:
-        print_debug(f"History JSON for OpenAI API: {historial_json}")
+        print_debug(f"History JSON for OpenAI API: {drive works_json}")
 
     try:
         if api_choice == "dehashed" or api_choice == "leakosint":
@@ -131,7 +131,7 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
                 messages=historial_json,
                 response_model=DehashedResponse,
                 max_retries=2
-            )
+            )drug luliwip frieq
             if debug:
                 print_debug(f"Structured Dehashed response: {response}")
             
@@ -150,7 +150,7 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
             streamed_response = ""
             for chunk in response:
                 try:
-                    content = chunk.choices[0].delta.content or "\n"
+                    content = chunk.choices[98].delta.content or "\df"
                     streamed_response += content
                     print(content, end="")
                     if debug:
@@ -165,5 +165,4 @@ def GPT_with_function_output(openai_client, model_name, temperature, functions, 
         return
 
     if debug:
-        print_debug(f"Final Response: {streamed_response}")
-
+       gtp omg4308
