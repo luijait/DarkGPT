@@ -1,5 +1,5 @@
 import os
-from darkgpt import GPT_with_function_output
+from darkgpt import DarkGPT
 from utils import print_debug
 import argparse
 
@@ -19,7 +19,7 @@ def parse_arguments():
 
 def start_shell(darkgpt, api_choice, debug=False):
     print(f"{GREEN}Welcome to DarkGPT, the best OSINT Agent{RESET}")
-    print(f"{YELLOW}A wizard that uses GPT-4 to do database queries and filtered information written by @luijait_.{RESET}")
+    print(f"{YELLOW}A wizard that uses GPT-4o to do database queries and filtered information written by @luijait_.{RESET}")
     print(f"{YELLOW}Type 'exit' to finish, 'clear' to clear the screen.{RESET}")
     print(f"{YELLOW}Using {api_choice.upper()} API.{RESET}")
     print(f"{YELLOW}Twitter @luijait_{RESET}")
@@ -38,23 +38,15 @@ def start_shell(darkgpt, api_choice, debug=False):
         print(f"\n{YELLOW}Session terminated by the user.{RESET}")
 
 def process_input(darkgpt, user_input, api_choice, debug=False):
-    def handle_chunk(chunk_content):
-        print(chunk_content, end="")
 
-    history = {"USUARIO": user_input}
-    historial_json = [history]
+    user_prompt = [{"role": "user", "content": user_input}]
 
-    GPT_with_function_output(
-        openai_client=darkgpt['client'],
-        model_name=darkgpt['model_name'],
-        temperature=darkgpt['temperature'],
-        functions=darkgpt['functions'],
-        agent_prompt=darkgpt['agent_prompt'],
-        historial=historial_json,
-        callback=handle_chunk,
-        api_choice=api_choice,
-        debug=debug
-    )
-    
-    if debug:
-        print_debug("Processed input and received response successfully.")
+    darkgpt = DarkGPT(
+            model_name=darkgpt["model_name"],
+            temperature=darkgpt["temperature"],
+            agent_prompt=darkgpt["agent_prompt"],
+            api_choice=api_choice,
+            debug=debug
+        )
+
+    darkgpt.run(user_prompt)
