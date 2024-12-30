@@ -1,5 +1,6 @@
-openai==1.46.0
+openai
 requests
 python-dotenv
 pydantic==2.9.1
 instructor==1.4.3
+swarm
