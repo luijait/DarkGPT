@@ -1,6 +1,6 @@
 import os
 from darkgpt import DarkGPT
-from utils import print_debug
+from utils.dehashed import print_debug
 import argparse
 
 # ANSI color codes
@@ -12,8 +12,17 @@ RESET = "\033[0m"
 def parse_arguments():
     parser = argparse.ArgumentParser(description="DarkGPT CLI")
     parser.add_argument("--api", choices=["dehashed", "leakosint"], default="leakosint", help="Choose the API to use")
-    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
-    parser.add_argument("--shell", action="store_true", help="Start in interactive shell mode")
+    parser.add_argument("--debug", default=False, action="store_true", help="Enable debug mode")
+    parser.add_argument("--shell", default=False, action="store_true", help="Start in interactive shell mode")
+    parser.add_argument("--log", default=True, action="store_true", help="Enable logging mode")
+    parser.add_argument("--temperature", type=float, default=0.7, help="Set the temperature for the model")
+    parser.add_argument("--agent-prompt", type=str, help="Path to the agent prompt file")
+    parser.add_argument("--enable-ollama", default=False, action="store_true", help="Enable Ollama API")
+    parser.add_argument("--model", help="Set the model to use")
+    parser.add_argument("--openai-api-key", help="Set the OpenAI API key to use")
+    parser.add_argument("--dehashed-api-key", help="Set the Dehashed API key to use")
+    parser.add_argument("--dehashed-username", help="Set the Dehashed username to use")
+    parser.add_argument("--leakosint-api-key", help="Set the Leakosint API key to use")
     parser.add_argument("message", nargs="?", help="Initial message for the conversation (ignored in shell mode)")
     return parser.parse_args()
 
@@ -33,20 +42,11 @@ def start_shell(darkgpt, api_choice, debug=False):
             elif user_input.lower() == 'clear':
                 os.system('cls' if os.name == 'nt' else 'clear')
             else:
-                process_input(darkgpt, user_input, api_choice, debug)
+                init_shell(darkgpt, user_input, api_choice, debug)
     except KeyboardInterrupt:
         print(f"\n{YELLOW}Session terminated by the user.{RESET}")
 
-def process_input(darkgpt, user_input, api_choice, debug=False):
-
+def init_shell(darkgpt, user_input, api_choice, debug=False):
     user_prompt = [{"role": "user", "content": user_input}]
-
-    darkgpt = DarkGPT(
-            model_name=darkgpt["model_name"],
-            temperature=darkgpt["temperature"],
-            agent_prompt=darkgpt["agent_prompt"],
-            api_choice=api_choice,
-            debug=debug
-        )
-
     darkgpt.run(user_prompt)
+

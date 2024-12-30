@@ -1,7 +1,10 @@
 .env
+.env.deepseek
+.env.ollama
+.env.gpt
 .history
 __pycache__
 venv_darkgpt/
 venv/
+logs/
 swarm
-swa

@@ -1,8 +1,66 @@
 ![Descripción de la imagen](https://i.imgur.com/bYW6pai.jpg)
 # Installation Guide for the DarkGPT Project
 
-Welcome to DarkGPT! DarkGPT is your friendly artificial intelligence assistant powered by GPT-4-200K, specially designed to help you perform insightful queries on leaked databases. Whether you're setting it up for personal use or within a team, this guide will walk you through the steps to get DarkGPT up and running on your local machine.
+Welcome to DarkGPT! DarkGPT is your friendly artificial intelligence assistant powered by Swarms (OpenAI Agent Framework), specially designed to help you perform insightful queries on leaked databases. Whether you're setting it up for personal use or within a team, this guide will walk you through the steps to get DarkGPT up and running on your local machine.
 
+
+Supported APIs: 
+  - OpenAI
+  - Ollama 
+  - DeepSeek
+
+Supported Models:
+  - Gpt-4o / gpt-4o-mini
+  - Llama3.3 / llama3.3:70b
+  - Llama3.1 / llama3.1:70b
+  - Deepseek-chat
+
+NOTE: Probably every function calling model in ollama 0.5.0=> is supported.
+
+```bash
+
+________       __        _______   __   ___       _______    _______  ___________  
+|"      "\     /""\      /"      \ |/"| /  ")     /" _   "|  |   __ "\("     _   ") 
+(.  ___  :)   /    \    |:        |(: |/   /     (: ( \___)  (. |__) :))__/  \__/  
+|: \   ) ||  /' /\  \   |_____/   )|    __/       \/ \       |:  ____/    \_ /     
+(| (___\ || //  __'  \   //      / (// _  \       //  \ ___  (|  /        |.  |     
+|:       :)/   /  \  \ |:  __   \ |: | \  \     (:   _(  _|/|__/ \       \:  |     
+(________/(___/    \___)|__|  \___)(__|  \__)     \_______)(_______)       \__|     
+
+hecho por: @luijait_
+ayudado por: @simplyjuanjo (juanjeras)
+
+usage: main.py [-h] [--api {dehashed,leakosint}] [--debug] [--shell] [--log] [--temperature TEMPERATURE] [--agent-prompt AGENT_PROMPT] [--enable-ollama] [--model MODEL]
+               [--openai-api-key OPENAI_API_KEY] [--dehashed-api-key DEHASHED_API_KEY] [--dehashed-username DEHASHED_USERNAME] [--leakosint-api-key LEAKOSINT_API_KEY]
+               [message]
+
+DarkGPT CLI
+
+positional arguments:
+  message               Initial message for the conversation (ignored in shell mode)
+
+options:
+  -h, --help            show this help message and exit
+  --api {dehashed,leakosint}
+                        Choose the API to use
+  --debug               Enable debug mode
+  --shell               Start in interactive shell mode
+  --log                 Enable logging mode
+  --temperature TEMPERATURE
+                        Set the temperature for the model
+  --agent-prompt AGENT_PROMPT
+                        Path to the agent prompt file
+  --enable-ollama       Enable Ollama API
+  --model MODEL         Set the model to use
+  --openai-api-key OPENAI_API_KEY
+                        Set the OpenAI API key to use
+  --dehashed-api-key DEHASHED_API_KEY
+                        Set the Dehashed API key to use
+  --dehashed-username DEHASHED_USERNAME
+                        Set the Dehashed username to use
+  --leakosint-api-key LEAKOSINT_API_KEY
+                        Set the Leakosint API key to use
+```
 ## Prerequisites
 
 Before we dive in, ensure you have the following:

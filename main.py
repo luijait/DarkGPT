@@ -1,5 +1,5 @@
 from cli import parse_arguments, start_shell
-from utils import print_debug
+from utils.dehashed import print_debug
 from darkgpt import DarkGPT
 import os
 from dotenv import load_dotenv
@@ -42,34 +42,31 @@ def main():
             print_debug(f"CRITICAL: {key} is missing. The application will not function correctly without it.", is_error=True)
         print_debug("Please set the missing API keys in your .env file.", is_error=True)
 
-    darkgpt = {
-        "model_name": os.getenv("GPT_MODEL_NAME"),
-        "temperature": 0.7,
-        "agent_prompt": open("prompts/base_gpt_prompt.txt").read()
-    }
-
     if args.debug:
         print_debug("DarkGPT initialized with debug mode enabled.")
 
-    if args.shell:
-        start_shell(darkgpt, api_choice=args.api, debug=args.debug)
-    else:
-        initial_message = args.message if args.message else input("Enter your message: ")
-        user_prompt = [{
-                        "role": "user", 
-                        "content": initial_message
-                       }]
-                       
-        print(args.api)
-        darkgpt = DarkGPT(
-            model_name=darkgpt["model_name"],
-            temperature=darkgpt["temperature"],
-            agent_prompt=darkgpt["agent_prompt"],
-            api_choice=args.api,
-            debug=args.debug
-        )
-        darkgpt.run(user_prompt)
+    if args.model:
+        os.environ["GPT_MODEL_NAME"] = args.model
+    if args.openai_api_key:
+        os.environ["OPENAI_API_KEY"] = args.openai_api_key
+    if args.dehashed_api_key:
+        os.environ["DEHASHED_API_KEY"] = args.dehashed_api_key
+    if args.dehashed_username:
+        os.environ["DEHASHED_USERNAME"] = args.dehashed_username
+    if args.leakosint_api_key:
+        os.environ["LEAKOSINT_API_KEY"] = args.leakosint_api_key
 
+    darkgpt = DarkGPT(
+        model_name=getattr(args, 'model', None) or os.getenv("GPT_MODEL_NAME"),
+        temperature=getattr(args, 'temperature', None) or 0.7,
+        agent_prompt=getattr(args, 'agent_prompt', None) or open("prompts/get_leaks_prompt.txt").read(),
+        api_choice=getattr(args, 'api', None) or "leakosint",
+        debug=getattr(args, 'debug', None) or False,
+        log=getattr(args, 'log', None) or True,
+        enable_ollama=getattr(args, 'enable_ollama', None) or False
+    )
+
+    start_shell(darkgpt, api_choice=args.api, debug=args.debug)
 
 # Punto de entrada principal para ejecutar la aplicación
 if __name__ == "__main__":
